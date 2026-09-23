@@ -1,0 +1,52 @@
+<div class="list-container">
+  <h1>Leads</h1>
+  
+  <mat-form-field appearance="outline" class="filter-field">
+    <mat-label>Filter by Status</mat-label>
+    <mat-select>
+      <mat-option value="all">All</mat-option>
+      <mat-option value="new">New</mat-option>
+      <mat-option value="qualified">Qualified</mat-option>
+      <mat-option value="won">Won</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z2">
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef> Title </th>
+      <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="contact">
+      <th mat-header-cell *matHeaderCellDef> Contact </th>
+      <td mat-cell *matCellDef="let element"> {{element.contact?.firstName}} {{element.contact?.lastName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef> Status </th>
+      <td mat-cell *matCellDef="let element"> 
+        <app-status-badge [status]="element.status"></app-status-badge>
+      </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="priority">
+      <th mat-header-cell *matHeaderCellDef> Priority </th>
+      <td mat-cell *matCellDef="let element"> {{element.priority}} </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="value">
+      <th mat-header-cell *matHeaderCellDef> Value </th>
+      <td mat-cell *matCellDef="let element"> ${{element.estimatedValue}} </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="created">
+      <th mat-header-cell *matHeaderCellDef> Created </th>
+      <td mat-cell *matCellDef="let element"> {{element.createdAt | timeAgo}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
+</div>

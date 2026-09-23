@@ -1,0 +1,13 @@
+{
+  "name": "omniagent-saas-core",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Multi-tenant AI Agent Orchestration Platform – MEAN Stack + TypeScript",
+  "scripts": {
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm start",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "start": "cd backend && npm start"
+  }
+}

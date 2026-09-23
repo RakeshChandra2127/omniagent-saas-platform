@@ -1,0 +1,92 @@
+<div class="inbox-container">
+  <!-- Left Panel: Conversation List -->
+  <div class="conversation-list-panel">
+    <div class="list-header">
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Status Filter</mat-label>
+        <mat-select [(ngModel)]="statusFilter" (selectionChange)="onFilterChange()">
+          <mat-option value="all">All</mat-option>
+          <mat-option value="active">Active</mat-option>
+          <mat-option value="waiting">Waiting for Human</mat-option>
+          <mat-option value="resolved">Resolved</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    
+    <mat-nav-list class="conv-list">
+      @for (conv of (conversations$ | async); track conv.id) {
+        <a mat-list-item (click)="selectConversation(conv)" [class.active-conv]="(selectedConversation$ | async)?.id === conv.id">
+          <span matListItemTitle>{{ conv.contact?.firstName || 'Unknown' }} {{ conv.contact?.lastName || '' }}</span>
+          <span matListItemLine class="conv-preview">{{ conv.lastMessage?.content | truncate: 40 }}</span>
+          <div matListItemMeta class="conv-meta">
+            <span class="time">{{ conv.updatedAt | timeAgo }}</span>
+            <app-status-badge [status]="conv.status"></app-status-badge>
+          </div>
+        </a>
+      } @empty {
+        <div class="empty-state">No conversations found.</div>
+      }
+    </mat-nav-list>
+  </div>
+
+  <!-- Right Panel: Message Thread -->
+  <div class="message-thread-panel">
+    @if (selectedConversation$ | async; as selected) {
+      <div class="thread-header">
+        <div class="contact-info">
+          <h2>{{ selected.contact?.firstName || 'Unknown' }} {{ selected.contact?.lastName || '' }}</h2>
+          <span class="channel-info">via {{ selected.channel }}</span>
+        </div>
+        <div class="thread-actions">
+          <app-status-badge [status]="selected.status"></app-status-badge>
+          @if (selected.status === 'active') {
+            <button mat-stroked-button color="warn" (click)="changeStatus('resolved')">Mark Resolved</button>
+          }
+          @if (selected.status === 'resolved') {
+            <button mat-stroked-button color="primary" (click)="changeStatus('active')">Reopen</button>
+          }
+        </div>
+      </div>
+
+      <div class="messages-container" #scrollMe>
+        @for (msg of (messages$ | async); track msg.id) {
+          <div class="message-row" [ngClass]="{'user-row': msg.role === 'user', 'assistant-row': msg.role === 'assistant'}">
+            
+            @if (msg.role === 'tool') {
+              <div class="tool-call-card">
+                <mat-icon>build</mat-icon>
+                <span>Executed Action: {{ msg.metadata?.toolName }}</span>
+              </div>
+            } @else {
+              <div class="message-bubble" [ngClass]="{'user-bubble': msg.role === 'user', 'assistant-bubble': msg.role === 'assistant'}">
+                <div class="message-content">{{ msg.content }}</div>
+                <div class="message-time">{{ msg.createdAt | timeAgo }}</div>
+              </div>
+            }
+
+          </div>
+        }
+
+        @if (isTyping) {
+          <div class="message-row assistant-row">
+            <div class="message-bubble assistant-bubble typing-indicator">
+              AI is processing...
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="message-input-area">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Send a message...</mat-label>
+          <input matInput disabled placeholder="Manual messaging is disabled in AI mode">
+        </mat-form-field>
+      </div>
+    } @else {
+      <div class="empty-thread">
+        <mat-icon class="large-icon">forum</mat-icon>
+        <p>Select a conversation to view messages</p>
+      </div>
+    }
+  </div>
+</div>

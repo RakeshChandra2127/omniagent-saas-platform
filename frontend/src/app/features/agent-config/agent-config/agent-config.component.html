@@ -1,0 +1,175 @@
+<div class="config-container">
+  <div class="header-actions">
+    <h1>{{ isEditMode ? 'Edit Agent' : 'Create New Agent' }}</h1>
+    <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="isLoading || agentForm.invalid">
+      {{ isLoading ? 'Saving...' : 'Save Agent' }}
+    </button>
+  </div>
+
+  <form [formGroup]="agentForm" class="config-form">
+    <mat-tab-group>
+      
+      <!-- Basic Info Tab -->
+      <mat-tab label="Basic Info">
+        <div class="tab-content">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Agent Name</mat-label>
+            <input matInput formControlName="name">
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" rows="3"></textarea>
+          </mat-form-field>
+          
+          <div class="row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Status</mat-label>
+              <mat-select formControlName="status">
+                <mat-option value="active">Active</mat-option>
+                <mat-option value="inactive">Inactive</mat-option>
+                <mat-option value="draft">Draft</mat-option>
+              </mat-select>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Channels</mat-label>
+              <mat-select formControlName="channels" multiple>
+                <mat-option value="web">Web Chat</mat-option>
+                <mat-option value="whatsapp">WhatsApp</mat-option>
+                <mat-option value="email">Email</mat-option>
+                <mat-option value="sms">SMS</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Greeting Message</mat-label>
+            <textarea matInput formControlName="greetingMessage" rows="2"></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Fallback Message</mat-label>
+            <textarea matInput formControlName="fallbackMessage" rows="2"></textarea>
+          </mat-form-field>
+        </div>
+      </mat-tab>
+      
+      <!-- AI Config Tab -->
+      <mat-tab label="AI Configuration">
+        <div class="tab-content">
+          <div class="row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>LLM Provider</mat-label>
+              <mat-select formControlName="llmProvider">
+                <mat-option value="openai">OpenAI</mat-option>
+                <mat-option value="anthropic">Anthropic</mat-option>
+                <mat-option value="gemini">Google Gemini</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Model</mat-label>
+              <mat-select formControlName="model">
+                <mat-option value="gpt-4-turbo">GPT-4 Turbo</mat-option>
+                <mat-option value="gpt-4o">GPT-4o</mat-option>
+                <mat-option value="gpt-3.5-turbo">GPT-3.5 Turbo</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          
+          <div class="slider-container">
+            <label>Temperature ({{agentForm.get('temperature')?.value}})</label>
+            <mat-slider min="0" max="1" step="0.1" class="full-width">
+              <input matSliderThumb formControlName="temperature">
+            </mat-slider>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Max Tokens</mat-label>
+            <input matInput type="number" formControlName="maxTokens">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>System Prompt</mat-label>
+            <textarea matInput formControlName="systemPrompt" rows="8" placeholder="You are a helpful assistant..."></textarea>
+          </mat-form-field>
+        </div>
+      </mat-tab>
+
+      <!-- Persona Tab -->
+      <mat-tab label="Persona & Guardrails" formGroupName="persona">
+        <div class="tab-content">
+          <div class="row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Tone</mat-label>
+              <mat-select formControlName="tone">
+                <mat-option value="professional">Professional</mat-option>
+                <mat-option value="friendly">Friendly</mat-option>
+                <mat-option value="casual">Casual</mat-option>
+                <mat-option value="empathetic">Empathetic</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Language</mat-label>
+              <mat-select formControlName="language">
+                <mat-option value="english">English</mat-option>
+                <mat-option value="spanish">Spanish</mat-option>
+                <mat-option value="french">French</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="toggle-container">
+            <mat-slide-toggle formControlName="requireHumanApproval">Require human approval for sensitive actions</mat-slide-toggle>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Sensitive Data Handling</mat-label>
+            <mat-select formControlName="sensitiveDataHandling">
+              <mat-option value="redact">Redact (mask sensitive data)</mat-option>
+              <mat-option value="block">Block (refuse to process)</mat-option>
+              <mat-option value="allow">Allow (process normally)</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-tab>
+
+      <!-- Knowledge Base Tab -->
+      <mat-tab label="Knowledge Base">
+        <div class="tab-content" formArrayName="knowledgeBase">
+          <div class="kb-header">
+            <h3>Knowledge Entries</h3>
+            <button mat-button color="primary" type="button" (click)="addKnowledgeEntry()">
+              <mat-icon>add</mat-icon> Add Entry
+            </button>
+          </div>
+
+          @for (entry of knowledgeBase.controls; track $index) {
+            <div class="kb-entry" [formGroupName]="$index">
+              <div class="kb-actions">
+                <button mat-icon-button color="warn" type="button" (click)="removeKnowledgeEntry($index)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Title/Topic</mat-label>
+                <input matInput formControlName="title">
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Content</mat-label>
+                <textarea matInput formControlName="content" rows="4"></textarea>
+              </mat-form-field>
+            </div>
+          }
+          @if (knowledgeBase.controls.length === 0) {
+            <p class="empty-text">No knowledge entries added yet.</p>
+          }
+        </div>
+      </mat-tab>
+      
+    </mat-tab-group>
+  </form>
+</div>

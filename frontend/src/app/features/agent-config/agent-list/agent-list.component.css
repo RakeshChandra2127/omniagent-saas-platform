@@ -1,0 +1,12 @@
+.list-container {
+  padding: 16px;
+}
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+table {
+  width: 100%;
+}

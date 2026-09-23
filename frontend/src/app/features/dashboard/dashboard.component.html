@@ -1,0 +1,59 @@
+<div class="dashboard-container">
+  <h1>Dashboard</h1>
+
+  @if (isLoading) {
+    <p>Loading metrics...</p>
+  } @else {
+    <div class="metrics-grid">
+      <mat-card class="metric-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar color="primary">forum</mat-icon>
+          <mat-card-title>Total Conversations</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="metric-value">{{ metrics.totalConversations }}</div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="metric-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar color="accent">chat</mat-icon>
+          <mat-card-title>Active Conversations</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="metric-value">{{ metrics.activeConversations }}</div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="metric-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar color="primary">people</mat-icon>
+          <mat-card-title>Total Leads</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="metric-value">{{ metrics.totalLeads }}</div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="metric-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar color="primary">event</mat-icon>
+          <mat-card-title>Total Bookings</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="metric-value">{{ metrics.totalBookings }}</div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="metric-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar color="primary">message</mat-icon>
+          <mat-card-title>Messages Today</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="metric-value">{{ metrics.messagesToday }}</div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>

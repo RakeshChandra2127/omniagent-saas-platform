@@ -1,0 +1,42 @@
+<div class="list-container">
+  <h1>Bookings</h1>
+  
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z2">
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef> Title </th>
+      <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="contact">
+      <th mat-header-cell *matHeaderCellDef> Contact </th>
+      <td mat-cell *matCellDef="let element"> {{element.contact?.firstName}} {{element.contact?.lastName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef> Status </th>
+      <td mat-cell *matCellDef="let element"> 
+        <app-status-badge [status]="element.status"></app-status-badge>
+      </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="scheduledAt">
+      <th mat-header-cell *matHeaderCellDef> Scheduled For </th>
+      <td mat-cell *matCellDef="let element"> {{element.startTime | date:'medium'}} </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="duration">
+      <th mat-header-cell *matHeaderCellDef> Duration </th>
+      <td mat-cell *matCellDef="let element"> {{element.durationMinutes}} min </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="location">
+      <th mat-header-cell *matHeaderCellDef> Location </th>
+      <td mat-cell *matCellDef="let element"> {{element.location}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
+</div>

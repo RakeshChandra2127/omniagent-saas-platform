@@ -1,0 +1,39 @@
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 24px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 500px;
+  padding: 24px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+}
+
+.half-width {
+  flex: 1;
+}
+
+.submit-btn {
+  padding: 8px 0;
+  margin-top: 8px;
+}
+
+.auth-actions {
+  display: flex;
+  justify-content: center;
+  padding-top: 16px;
+}

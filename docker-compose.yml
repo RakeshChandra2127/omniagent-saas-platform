@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  # MongoDB for Primary Data Store (Multi-tenant structure)
+  mongodb:
+    image: mongo:6.0
+    container_name: omniagent-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+    restart: unless-stopped
+
+  # Redis for Caching, Rate Limiting, and Pub/Sub (Socket.io)
+  redis:
+    image: redis:7.0-alpine
+    container_name: omniagent-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  mongodb_data:
+  redis_data:

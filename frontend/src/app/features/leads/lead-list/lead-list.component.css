@@ -1,0 +1,11 @@
+.list-container {
+  padding: 16px;
+}
+.filter-field {
+  width: 100%;
+  max-width: 250px;
+  margin-bottom: 16px;
+}
+table {
+  width: 100%;
+}

@@ -1,0 +1,45 @@
+<div class="list-container">
+  <h1>Contacts</h1>
+  
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Search contacts</mat-label>
+    <input matInput placeholder="Name, email or phone...">
+  </mat-form-field>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z2">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.firstName}} {{element.lastName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="phone">
+      <th mat-header-cell *matHeaderCellDef> Phone </th>
+      <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef> Email </th>
+      <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="leadStatus">
+      <th mat-header-cell *matHeaderCellDef> Status </th>
+      <td mat-cell *matCellDef="let element"> {{element.leadStatus}} </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="source">
+      <th mat-header-cell *matHeaderCellDef> Source </th>
+      <td mat-cell *matCellDef="let element"> {{element.source}} </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="lastContacted">
+      <th mat-header-cell *matHeaderCellDef> Last Contacted </th>
+      <td mat-cell *matCellDef="let element"> {{element.lastContactedAt | timeAgo}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
+</div>
